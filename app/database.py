@@ -1,19 +1,22 @@
-"""
-Database configuration and session management.
-"""
+"""Database configuration and session management."""
 
+import os
+from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
-from typing import Generator
 
-# SQLite database URL
-DATABASE_URL = "sqlite:///./finance.db"
+# Allow configuring the database URL via environment (recommended for production)
+# Defaults to a local SQLite file for development.
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./finance.db")
+
+# SQLite requires a special connect arg. Only set it for sqlite URLs.
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
 # Create SQLAlchemy engine
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"check_same_thread": False},  # Required for SQLite
-    echo=False  # Set to True for SQL debugging
+    connect_args=connect_args,
+    echo=False,
 )
 
 # Create session factory

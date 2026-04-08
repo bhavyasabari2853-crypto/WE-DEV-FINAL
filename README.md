@@ -584,3 +584,26 @@ For issues and questions:
 ---
 
 **Built with ❤️ using FastAPI**
+
+## Deploy to Render (Docker)
+
+1. Push your repository to GitHub (or connect the repo in Render).
+
+2. In Render, create a new **Web Service** and choose **Docker**.
+    - Render will use the `Dockerfile` at the repo root to build the container.
+    - Set the `PORT` environment variable (default `8000`).
+    - Add environment variables: `DATABASE_URL`, `SECRET_KEY`, `ACCESS_TOKEN_EXPIRE_MINUTES`.
+
+3. (Optional) Add a managed PostgreSQL instance in Render and set `DATABASE_URL` accordingly:
+    - Example: `postgresql://user:password@<HOST>:5432/<DB_NAME>`
+
+4. Deployment notes:
+    - The Dockerfile builds the frontend during image build and copies it into `app/static` so the FastAPI app serves the UI at `/`.
+    - For local testing, you can build and run the image:
+
+```bash
+docker build -t myapp:latest .
+docker run -e DATABASE_URL="sqlite:///./finance.db" -p 8000:8000 myapp:latest
+```
+
+I added `render.yaml` to the repo which provides a minimal Render service declaration (you can edit the service name or plan as needed).

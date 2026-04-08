@@ -5,8 +5,11 @@ Main application entry point
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
+from fastapi.responses import Response, FileResponse
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 import base64
+import os
 
 from app.database import init_db
 from .routers import auth, portfolio, education, investment, expenses, achievements, profile, financial_profile
@@ -22,6 +25,9 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Path to optional static frontend files (app/static)
+STATIC_DIR = Path(__file__).parent / "static"
+
 # Add CORS middleware (allow all origins for development - restrict in production)
 app.add_middleware(
     CORSMiddleware,
@@ -31,6 +37,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# If a built frontend exists, mount it so the app can serve static files.
+if STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
 
 # ========================
 # Root Endpoint
@@ -38,7 +48,10 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    """Root endpoint - API health check."""
+    """Root endpoint - serve frontend `index.html` if present, otherwise API health JSON."""
+    index_path = STATIC_DIR / "index.html"
+    if index_path.exists():
+        return FileResponse(index_path)
     return {
         "message": "Personal Investment Management System API",
         "version": "1.0.0",
