@@ -46,6 +46,7 @@ A production-ready FastAPI backend for managing personal investments with JWT au
 - **Password Hashing**: Passlib + bcrypt
 - **Validation**: Pydantic
 - **API Server**: Uvicorn
+<img width="1509" height="702" alt="image" src="https://github.com/user-attachments/assets/125341c4-2949-4b62-8dfe-26c668a3b14c" />
 
 ## Project Structure
 
