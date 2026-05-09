@@ -2,6 +2,9 @@
 
 A production-ready FastAPI backend for managing personal investments with JWT authentication, portfolio tracking, and investment education.
 
+<img width="1448" height="673" alt="image" src="https://github.com/user-attachments/assets/fd263662-345b-4309-afa8-bc42c1e8f73a" />
+
+
 ## Features
 
 ✅ **User Authentication**
